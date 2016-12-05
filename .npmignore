@@ -1,0 +1,12 @@
+.babelrc
+.flowconfig
+.gitignore
+.npmignore
+.travis.yml
+coverage/
+example/
+flow-typed/
+lib/
+test/
+node_modules/
+yarn.lock

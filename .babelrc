@@ -1,0 +1,10 @@
+{
+  "presets": [
+    "latest-minimal"
+  ],
+  "plugins": [
+    "add-module-exports",
+    "syntax-flow",
+    "transform-flow-strip-types"
+  ]
+}
