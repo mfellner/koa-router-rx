@@ -2,13 +2,16 @@
 
 import Koa from 'koa'
 import RxRouter from '../lib'
-import { Observable } from 'rxjs/Rx'
+import { Observable } from 'rxjs'
 
-function combineEpics(...epics) {
+import type { Epic } from '../lib'
+
+function combineEpics(...epics: Array<Epic<any,any>>): Epic<any,any> {
+  // $FlowIgnore
   return observable => Observable.combineLatest(...epics.map(epic => epic(observable)))
 }
 
-function foldEpics(...epics) {
+function foldEpics(...epics: Array<Epic<any,any>>): Epic<any,any> {
   return observable => epics.reduce((obs, epic) => epic(obs), observable)
 }
 
@@ -22,7 +25,7 @@ const epicMap2 = observable =>
   observable.map(string => `${string} Rx rocks!`)
 
 const epicFail = observable =>
-  observable.mergeMapTo(Observable.throw(new Error('Epic fail!')))
+  observable.switchMapTo(Observable.throw(new Error('Epic fail!')))
 
 const app = new Koa()
 const router = new RxRouter()

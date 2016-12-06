@@ -1,6 +1,6 @@
 {
   "name": "koa-router-rx",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Reactive router middleware for koa",
   "main": "dist/index.js",
   "repository": "https://github.com/mfellner/koa-router-rx.git",
@@ -27,7 +27,8 @@
     "test": "NODE_ENV=test jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "flow-gen-files": "flow-copy-source -v lib dist",
-    "flow-typed-install": "flow-typed install"
+    "flow-typed-install": "flow-typed install",
+    "prepublish": "rm -f dist/* && npm run dist && npm run flow-gen-files"
   },
   "dependencies": {
     "koa-router": "7.0.1",
