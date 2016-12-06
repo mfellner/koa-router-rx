@@ -26,6 +26,7 @@
     "start": "babel-node example/server.js",
     "test": "NODE_ENV=test jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "flow-gen-files": "flow-copy-source -v lib dist",
     "flow-typed-install": "flow-typed install"
   },
   "dependencies": {
@@ -41,6 +42,7 @@
     "babel-plugin-transform-flow-strip-types": "6.18.0",
     "babel-preset-latest-minimal": "1.1.2",
     "flow-bin": "0.36.0",
+    "flow-copy-source": "1.1.0",
     "flow-typed": "2.0.0",
     "jest": "17.0.3",
     "koa": "2.0.0-alpha.7",
