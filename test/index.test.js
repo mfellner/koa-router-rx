@@ -45,7 +45,7 @@ describe('RxRouter', () => {
     await init(router).put('/teapot').expect(418)
   })
 
-  it('should map Observables of Context to Context', async () => {
+  it('should merge Observables of Response-like into Response', async () => {
     const router = new RxRouter()
     router.put('/teapot', obs => obs.mapTo({body: 'tea', status: 418}))
 
