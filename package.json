@@ -31,21 +31,21 @@
     "prepublish": "rm -f dist/* && npm run dist && npm run flow-gen-files"
   },
   "dependencies": {
-    "koa-router": "7.0.1",
-    "rxjs": "5.0.0-rc.4"
+    "koa-router": "7.1.0",
+    "rxjs": "5.0.2"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
-    "babel-core": "6.18.2",
-    "babel-jest": "17.0.2",
+    "babel-core": "6.21.0",
+    "babel-jest": "18.0.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-syntax-flow": "6.18.0",
-    "babel-plugin-transform-flow-strip-types": "6.18.0",
+    "babel-plugin-transform-flow-strip-types": "6.21.0",
     "babel-preset-latest-minimal": "1.1.2",
-    "flow-bin": "0.36.0",
+    "flow-bin": "0.37.4",
     "flow-copy-source": "1.1.0",
     "flow-typed": "2.0.0",
-    "jest": "17.0.3",
+    "jest": "18.1.0",
     "koa": "2.0.0-alpha.7",
     "supertest": "2.0.1",
     "supertest-as-promised": "4.0.2"
