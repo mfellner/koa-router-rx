@@ -4,8 +4,6 @@ import Koa from 'koa'
 import RxRouter, { util } from '../lib'
 import { Observable } from 'rxjs'
 
-import type { Epic } from '../lib'
-
 const epicResponse = observable =>
   observable.mapTo('Epic response!')
 

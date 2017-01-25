@@ -22,33 +22,34 @@
     "node": ">=6"
   },
   "scripts": {
+    "clean": "rm -rf dist/*",
     "dist": "babel -d dist lib",
     "start": "babel-node example/server.js",
     "test": "NODE_ENV=test jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "flow-check": "flow check",
     "flow-gen-files": "flow-copy-source -v lib dist",
-    "flow-typed-install": "flow-typed install",
-    "prepublish": "rm -f dist/* && npm run dist && npm run flow-gen-files"
+    "flow-typed-install": "flow-typed install -o",
+    "prepublish": "npm run clean && npm run dist && npm run flow-gen-files"
   },
   "dependencies": {
     "koa-router": "7.1.0",
-    "rxjs": "5.0.2"
+    "rxjs": "5.0.3"
   },
   "devDependencies": {
-    "babel-cli": "6.18.0",
-    "babel-core": "6.21.0",
+    "babel-cli": "6.22.2",
+    "babel-core": "6.22.1",
     "babel-jest": "18.0.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-syntax-flow": "6.18.0",
-    "babel-plugin-transform-flow-strip-types": "6.21.0",
+    "babel-plugin-transform-flow-strip-types": "6.22.0",
     "babel-preset-latest-minimal": "1.1.2",
-    "flow-bin": "0.37.4",
+    "flow-bin": "0.38.0",
     "flow-copy-source": "1.1.0",
     "flow-typed": "2.0.0",
     "jest": "18.1.0",
-    "koa": "2.0.0-alpha.7",
-    "supertest": "2.0.1",
-    "supertest-as-promised": "4.0.2"
+    "koa": "2.0.0",
+    "supertest": "2.0.1"
   },
   "jest": {
     "testEnvironment": "node",
