@@ -26,20 +26,24 @@ describe('RxRouter', () => {
 
   it('should support multiple routes, methods and Epics', async () => {
     const router = new RxRouter()
+    const methods = [
+      'del',
+      'delete',
+      'get',
+      'patch',
+      'post',
+      'put'
+    ];
 
-    router.get('/test1', obs => obs.mapTo('get-test1'))
-    router.post('/test1', obs => obs.mapTo('post-test1'))
-    router.put('/test2', obs => obs.mapTo('put-test2'))
-    router.del('/test3', obs => obs.mapTo('del-test3'))
-    router.delete('/test4', obs => obs.mapTo('del-test4'))
+    methods.forEach((methodName) => {
+      router[methodName](`/${methodName}`, obs => obs.mapTo(methodName))
+    });
 
     const request = init(router)
 
-    await request.get('/test1').expect('get-test1')
-    await request.post('/test1').expect('post-test1')
-    await request.put('/test2').expect('put-test2')
-    await request.del('/test3').expect('del-test3')
-    await request.delete('/test4').expect('del-test4')
+    for (let methodName of methods) {
+      await request[methodName](`/${methodName}`).expect(methodName)
+    }
   })
 
   it('should map Observables of number to status code', async () => {
