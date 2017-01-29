@@ -46,6 +46,17 @@ describe('RxRouter', () => {
     }
   })
 
+  it('does not replace route paths if exists', async () => {
+    const router = new RxRouter()
+
+    router.get('/get/1', obs => obs.mapTo('first-response'))
+    router.get('/get/1', obs => obs.mapTo('second-response'))
+
+    const request = init(router)
+
+    await request.get('/get/1').expect('first-response')
+  })
+
   it('should map Observables of number to status code', async () => {
     const router = new RxRouter()
     router.put('/teapot', obs => obs.mapTo(418))
