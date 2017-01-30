@@ -1,0 +1,142 @@
+// @flow
+
+import type { Observable } from 'rxjs'
+
+declare type Epic<A, B> = (observable: Observable<A>) => Observable<B>;
+
+declare export function combineEpics<A, B, C>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+): Epic<A, [B, C]>;
+
+declare export function combineEpics<A, B, C, D>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+  c: Epic<A, D>,
+): Epic<A, [B, C, D]>;
+
+declare export function combineEpics<A, B, C, D, E>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+  c: Epic<A, D>,
+  d: Epic<A, E>,
+): Epic<A, [B, C, D, E]>;
+
+declare export function combineEpics<A, B, C, D, E, F>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+  c: Epic<A, D>,
+  d: Epic<A, E>,
+  e: Epic<A, F>,
+): Epic<A, [B, C, D, F]>;
+
+declare export function combineEpics<A, B, C, D, E, F, G>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+  c: Epic<A, D>,
+  d: Epic<A, E>,
+  e: Epic<A, F>,
+  f: Epic<A, G>,
+): Epic<A, [B, C, D, F, G]>;
+
+declare export function combineEpics<A, B, C, D, E, F, G, H>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+  c: Epic<A, D>,
+  d: Epic<A, E>,
+  e: Epic<A, F>,
+  f: Epic<A, G>,
+  g: Epic<A, H>,
+): Epic<A, [B, C, D, F, G, H]>;
+
+declare export function combineEpics<A, B, C, D, E, F, G, H, I>(
+  a: Epic<A, B>,
+  b: Epic<A, C>,
+  c: Epic<A, D>,
+  d: Epic<A, E>,
+  e: Epic<A, F>,
+  f: Epic<A, G>,
+  g: Epic<A, H>,
+  h: Epic<A, I>,
+): Epic<A, [B, C, D, F, G, H, I]>;
+
+declare export function foldEpics<A, B, C>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+): Epic<A, C>;
+
+declare export function foldEpics<A, B, C, D>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+): Epic<A, D>;
+
+declare export function foldEpics<A, B, C, D, E>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+): Epic<A, E>;
+
+declare export function foldEpics<A, B, C, D, E, F>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+  e: Epic<E, F>,
+): Epic<A, F>;
+
+declare export function foldEpics<A, B, C, D, E, F, G>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+  e: Epic<E, F>,
+  f: Epic<F, G>,
+): Epic<A, G>;
+
+declare export function foldEpics<A, B, C, D, E, F, G, H>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+  e: Epic<E, F>,
+  f: Epic<F, G>,
+  g: Epic<G, H>,
+): Epic<A, H>;
+
+declare export function foldEpics<A, B, C, D, E, F, G, H, I>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+  e: Epic<E, F>,
+  f: Epic<F, G>,
+  g: Epic<G, H>,
+  h: Epic<H, I>,
+): Epic<A, I>;
+
+declare export function foldEpics<A, B, C, D, E, F, G, H, I, J>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+  e: Epic<E, F>,
+  f: Epic<F, G>,
+  g: Epic<G, H>,
+  h: Epic<H, I>,
+  i: Epic<I, J>,
+): Epic<A, J>;
+
+declare export function foldEpics<A, B, C, D, E, F, G, H, I, J, K>(
+  a: Epic<A, B>,
+  b: Epic<B, C>,
+  c: Epic<C, D>,
+  d: Epic<D, E>,
+  e: Epic<E, F>,
+  f: Epic<F, G>,
+  g: Epic<G, H>,
+  h: Epic<H, I>,
+  i: Epic<I, J>,
+  i: Epic<J, K>,
+): Epic<A, K>;

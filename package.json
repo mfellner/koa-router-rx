@@ -22,13 +22,14 @@
     "node": ">=6"
   },
   "scripts": {
-    "clean": "rm -rf dist/*",
+    "clean": "rimraf dist/*",
     "dist": "babel -d dist lib",
     "start": "babel-node example/server.js",
     "test": "NODE_ENV=test jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "flow-check": "flow check",
-    "flow-gen-files": "flow-copy-source -v lib dist",
+    "flow-copy-files": "cpy lib/*.flow dist",
+    "flow-gen-files": "flow-copy-source -v lib dist && cpy lib/*.flow dist",
     "flow-typed-install": "flow-typed install -o",
     "prepublish": "npm run clean && npm run dist && npm run flow-gen-files"
   },
@@ -44,12 +45,14 @@
     "babel-plugin-syntax-flow": "6.18.0",
     "babel-plugin-transform-flow-strip-types": "6.22.0",
     "babel-preset-latest-minimal": "1.1.2",
+    "cpy-cli": "1.0.1",
     "flow-bin": "0.38.0",
     "flow-copy-source": "1.1.0",
     "flow-typed": "2.0.0",
     "jest": "18.1.0",
     "koa": "2.0.0",
-    "supertest": "2.0.1"
+    "rimraf": "2.5.4",
+    "supertest": "3.0.0"
   },
   "jest": {
     "testEnvironment": "node",

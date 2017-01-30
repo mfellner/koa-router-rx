@@ -12,6 +12,7 @@ describe('combineEpics', () => {
   it('should not combine 1 epic', () => {
     let err = null
     try {
+      // $FlowIgnore
       util.combineEpics(e1)
     } catch (e) {
       err = e
@@ -30,6 +31,7 @@ describe('combineEpics', () => {
     const results = [1, 42, 42, 1, 1, 1, 42, 1]
 
     for (let i = 3; i <= epics.length; i += 1) {
+      // $FlowIgnore
       const epic = util.combineEpics(...epics.slice(0, i))
       const result = await epic(Observable.of(0)).toPromise()
       expect(result).toEqual(results.slice(0, i))
@@ -39,6 +41,7 @@ describe('combineEpics', () => {
   it('should not combine more than 8 epics', () => {
     let err = null
     try {
+      // $FlowIgnore
       util.combineEpics(e1, e1, e1, e1, e1, e1, e1, e1, e1)
     } catch (e) {
       err = e
