@@ -35,26 +35,15 @@ describe('RxRouter', () => {
       'put'
     ];
 
-    methods.forEach((methodName) => {
+    for (let methodName of methods) {
       router[methodName](`/${methodName}`, obs => obs.mapTo(methodName))
-    });
+    }
 
     const request = init(router)
 
     for (let methodName of methods) {
       await request[methodName](`/${methodName}`).expect(methodName)
     }
-  })
-
-  it('does not replace route paths if exists', async () => {
-    const router = new RxRouter()
-
-    router.get('/get/1', obs => obs.mapTo('first-response'))
-    router.get('/get/1', obs => obs.mapTo('second-response'))
-
-    const request = init(router)
-
-    await request.get('/get/1').expect('first-response')
   })
 
   it('should map Observables of number to status code', async () => {
