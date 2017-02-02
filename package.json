@@ -1,6 +1,6 @@
 {
   "name": "koa-router-rx",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Reactive router middleware for koa",
   "main": "dist/index.js",
   "repository": "https://github.com/mfellner/koa-router-rx.git",
