@@ -11,5 +11,9 @@ cache:
     - node_modules
 before_script:
   - npm install coveralls
+script:
+  - npm run flow-typed-install
+  - npm run flow-check
+  - npm test
 after_success:
   - npm run coveralls
