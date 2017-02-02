@@ -30,12 +30,12 @@
     "flow-check": "flow check",
     "flow-copy-files": "cpy lib/*.flow dist",
     "flow-gen-files": "flow-copy-source -v lib dist && cpy lib/*.flow dist",
-    "flow-typed-install": "flow-typed install -o",
+    "flow-typed-install": "rimraf flow-typed/npm/*_vx.x.x.js && flow-typed install -o",
     "prepublish": "npm run clean && npm run dist && npm run flow-gen-files"
   },
   "dependencies": {
     "koa-router": "7.1.0",
-    "rxjs": "5.0.3"
+    "rxjs": "5.1.0"
   },
   "devDependencies": {
     "babel-cli": "6.22.2",

@@ -12,6 +12,7 @@ describe('RxRouter', () => {
   function init(router: RxRouter) {
     const app = new Koa()
     app.use(router.routes())
+    app.use(router.allowedMethods())
     server = app.listen(3333)
     return supertest.agent(server)
   }
@@ -24,26 +25,49 @@ describe('RxRouter', () => {
     await init(router).get('/test/hello').expect(200).expect('test-hello')
   })
 
-  it('should support multiple routes, methods and Epics', async () => {
+  it('should support multiple routes and methods', async () => {
     const router = new RxRouter()
     const methods = [
-      'del',
-      'delete',
+      'head',
+      'options',
       'get',
-      'patch',
       'post',
-      'put'
-    ];
+      'put',
+      'patch',
+      'del',
+      'delete'
+    ]
 
     for (let methodName of methods) {
+      expect(methodName in router).toBe(true)
+
+      const methodBody = router[methodName].toString()
+      const methodSignature = new RegExp(`^${methodName}\\(path, epic\\)`)
+      expect(methodBody).toMatch(methodSignature)
+
+      // $FlowIgnore https://github.com/facebook/flow/issues/2286
       router[methodName](`/${methodName}`, obs => obs.mapTo(methodName))
     }
 
     const request = init(router)
 
     for (let methodName of methods) {
-      await request[methodName](`/${methodName}`).expect(methodName)
+      const {text} = await request[methodName](`/${methodName}`).expect(200)
+      if (methodName !== 'head') {
+        expect(text).toEqual(methodName)
+      }
     }
+  })
+
+  it('should support multiple methods on the same route', async () => {
+    const router = new RxRouter()
+    router.get('/test', obs => obs.mapTo(200))
+    router.post('/test', obs => obs.mapTo(201))
+
+    const request = init(router)
+    await request.get('/test').expect(200)
+    await request.post('/test').expect(201)
+    await request.put('/test').expect(405) // Method Not Allowed
   })
 
   it('should map Observables of number to status code', async () => {
