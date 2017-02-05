@@ -3,6 +3,7 @@
 import Koa from 'koa'
 import supertest from 'supertest'
 import RxRouter from '../lib'
+import type { Middleware } from 'koa'
 
 describe('RxRouter', () => {
   let server
@@ -42,8 +43,6 @@ describe('RxRouter', () => {
       expect(methodName in router).toBe(true)
 
       const methodBody = router[methodName].toString()
-      const methodSignature = new RegExp(`^${methodName}\\(path, epic\\)`)
-      expect(methodBody).toMatch(methodSignature)
 
       // $FlowIgnore https://github.com/facebook/flow/issues/2286
       router[methodName](`/${methodName}`, obs => obs.mapTo(methodName))
@@ -82,5 +81,60 @@ describe('RxRouter', () => {
     router.put('/teapot', obs => obs.mapTo({body: 'tea', status: 418}))
 
     await init(router).put('/teapot').expect(418).expect('tea')
+  })
+
+  it('supports named routes', async () => {
+    const router = new RxRouter()
+    const epic = obs => obs.map(ctx => `test-${ctx.params.id}`)
+    router.get('my-name-route', '/test/:id', epic)
+
+    expect(router.url('my-name-route', 3333)).toEqual('/test/3333')
+
+    await init(router).get('/test/hello').expect(200).expect('test-hello')
+  })
+
+  it('supports regexp', async () => {
+    const router = new RxRouter()
+    const epic = obs => obs.map(ctx => `test-regexp`)
+    router.get(/test/g, epic)
+
+    await init(router).get('/test/hello').expect(200).expect('test-regexp')
+  })
+
+  it('supports middlewares if provided as an array in second argument', async () => {
+    const message = 'Route requires: Headers - "Content-Type" must be "application/json"'
+    const mwPostJson: Middleware = async (ctx, next) => {
+      if (ctx.request.is('application/json')) { return next(); }
+
+      const errStatus = 400
+      ctx.body = {
+        code: errStatus,
+        message,
+        status: 'error'
+      }
+      ctx.status = errStatus
+    }
+
+    const router = new RxRouter()
+    const expectedPostResponse = {
+      my: 'data'
+    }
+    const epic = obs => obs.map(ctx => expectedPostResponse)
+    router.post('/test/:id', [ mwPostJson ], epic)
+
+    const testServer = init(router)
+    await testServer.post('/test/hello').expect(400).expect({
+      code: 400,
+      message,
+      status: 'error'
+    })
+
+    await testServer.post('/test/hello')
+      .set({
+        'Accept': 'application/json'
+      })
+      .send({ json: 'data' })
+      .expect(200)
+      .expect(expectedPostResponse)
   })
 })
