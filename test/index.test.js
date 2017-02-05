@@ -3,6 +3,7 @@
 import Koa from 'koa'
 import supertest from 'supertest'
 import RxRouter from '../lib'
+import { Observable } from 'rxjs'
 
 describe('RxRouter', () => {
   let server
@@ -82,5 +83,29 @@ describe('RxRouter', () => {
     router.put('/teapot', obs => obs.mapTo({body: 'tea', status: 418}))
 
     await init(router).put('/teapot').expect(418).expect('tea')
+  })
+
+  describe('allows user to pass options', () => {
+    afterEach(() => { if (server) server.close() })
+
+    it('handleEpicRequest', async () => {
+      const router = new RxRouter({
+        rx: {
+          handleEpicRequest: async (ctx, promise) => {
+            const payload = await promise
+            ctx.status = 201
+            ctx.body = {
+              message: payload + '-mutated'
+            }
+          }
+        }
+      })
+      const epic = obs => obs.map(ctx => `test-${ctx.params.id}`)
+      router.get('/test/:id', epic)
+
+      await init(router).get('/test/hello').expect(201).expect({
+        message: 'test-hello-mutated'
+      })
+    })
   })
 })
