@@ -95,7 +95,7 @@ describe('RxRouter', () => {
             const payload = await promise
             ctx.status = 201
             ctx.body = {
-              message: payload + '-mutated'
+              message: `${payload}-mutated`
             }
           }
         }
