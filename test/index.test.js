@@ -3,6 +3,7 @@
 import Koa from 'koa'
 import supertest from 'supertest'
 import RxRouter from '../lib'
+import type { Middleware } from 'koa'
 
 describe('RxRouter', () => {
   let server
@@ -93,8 +94,8 @@ describe('RxRouter', () => {
   })
 
   it('supports middlewares if provided as an array in second argument', async () => {
-    const message = 'Route requires: Headers - "Content-Type" must be "application/json"';
-    const mwPostJson = async (ctx, next) => {
+    const message = 'Route requires: Headers - "Content-Type" must be "application/json"'
+    const mwPostJson: Middleware = async (ctx, next) => {
       if (ctx.request.is('application/json')) { return next(); }
 
       const errStatus = 400
@@ -104,16 +105,21 @@ describe('RxRouter', () => {
         status: 'error'
       }
       ctx.status = errStatus
-    };
+    }
 
     const router = new RxRouter()
-    const epic = obs => obs.map(ctx => `test-${ctx.params.id}`)
+    const epic = obs => obs.map(ctx => ({ my: 'data' }))
     router.post('/test/:id', [ mwPostJson ], epic)
 
-    await init(router).post('/test/hello').expect(400).expect({
+    const testServer = init(router)
+    await testServer.post('/test/hello').expect(400).expect({
       code: 400,
       message,
       status: 'error'
+    })
+
+    await testServer.post('/test/hello').send({ json: 'data' }).expect(200).expect({
+      my: 'data'
     })
   })
 })
