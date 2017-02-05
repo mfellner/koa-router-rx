@@ -82,6 +82,16 @@ describe('RxRouter', () => {
     await init(router).put('/teapot').expect(418).expect('tea')
   })
 
+  it('supports named routes', async () => {
+    const router = new RxRouter()
+    const epic = obs => obs.map(ctx => `test-${ctx.params.id}`)
+    router.get('my-name-route', '/test/:id', epic)
+
+    expect(router.url('my-name-route', 3333)).toEqual('/test/3333')
+
+    await init(router).get('/test/hello').expect(200).expect('test-hello')
+  })
+
   it('supports middlewares if provided as an array in second argument', async () => {
     const message = 'Route requires: Headers - "Content-Type" must be "application/json"';
     const mwPostJson = async (ctx, next) => {
