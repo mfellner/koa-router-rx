@@ -128,9 +128,5 @@ describe('RxRouter', () => {
       .send({ json: 'data' })
       .expect(200)
       .expect(expectedPostResponse)
-      .expect((res) => {
-        expect(res.body)
-          .toEqual(expectedPostResponse)
-      })
   })
 })
