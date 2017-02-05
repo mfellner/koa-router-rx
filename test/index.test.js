@@ -93,6 +93,14 @@ describe('RxRouter', () => {
     await init(router).get('/test/hello').expect(200).expect('test-hello')
   })
 
+  it('supports regexp', async () => {
+    const router = new RxRouter()
+    const epic = obs => obs.map(ctx => `test-regexp`)
+    router.get(/test/g, epic)
+
+    await init(router).get('/test/hello').expect(200).expect('test-regexp')
+  })
+
   it('supports middlewares if provided as an array in second argument', async () => {
     const message = 'Route requires: Headers - "Content-Type" must be "application/json"'
     const mwPostJson: Middleware = async (ctx, next) => {
