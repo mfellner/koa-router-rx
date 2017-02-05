@@ -108,7 +108,10 @@ describe('RxRouter', () => {
     }
 
     const router = new RxRouter()
-    const epic = obs => obs.map(ctx => ({ my: 'data' }))
+    const expectedPostResponse = {
+      my: 'data'
+    }
+    const epic = obs => obs.map(ctx => expectedPostResponse)
     router.post('/test/:id', [ mwPostJson ], epic)
 
     const testServer = init(router)
@@ -118,8 +121,16 @@ describe('RxRouter', () => {
       status: 'error'
     })
 
-    await testServer.post('/test/hello').send({ json: 'data' }).expect(200).expect({
-      my: 'data'
-    })
+    await testServer.post('/test/hello')
+      .set({
+        'Accept': 'application/json'
+      })
+      .send({ json: 'data' })
+      .expect(200)
+      .expect(expectedPostResponse)
+      .expect((res) => {
+        expect(res.body)
+          .toEqual(expectedPostResponse)
+      })
   })
 })
