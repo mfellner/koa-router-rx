@@ -42,8 +42,6 @@ describe('RxRouter', () => {
       expect(methodName in router).toBe(true)
 
       const methodBody = router[methodName].toString()
-      const methodSignature = new RegExp(`^${methodName}\\(path, epic\\)`)
-      expect(methodBody).toMatch(methodSignature)
 
       // $FlowIgnore https://github.com/facebook/flow/issues/2286
       router[methodName](`/${methodName}`, obs => obs.mapTo(methodName))
@@ -82,5 +80,30 @@ describe('RxRouter', () => {
     router.put('/teapot', obs => obs.mapTo({body: 'tea', status: 418}))
 
     await init(router).put('/teapot').expect(418).expect('tea')
+  })
+
+  it('supports middlewares if provided as an array in second argument', async () => {
+    const message = 'Route requires: Headers - "Content-Type" must be "application/json"';
+    const mwPostJson = async (ctx, next) => {
+      if (ctx.request.is('application/json')) { return next(); }
+
+      const errStatus = 400
+      ctx.body = {
+        code: errStatus,
+        message,
+        status: 'error'
+      }
+      ctx.status = errStatus
+    };
+
+    const router = new RxRouter()
+    const epic = obs => obs.map(ctx => `test-${ctx.params.id}`)
+    router.post('/test/:id', [ mwPostJson ], epic)
+
+    await init(router).post('/test/hello').expect(400).expect({
+      code: 400,
+      message,
+      status: 'error'
+    })
   })
 })
